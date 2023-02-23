@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        'use strict';
+
+        function readNumber() {
+
+            loop: while(true) {
+
+                let count = prompt('Turn count: ', 0);
+
+                if ( !isFinite(count) ) continue loop;
+                else if (count === null 
+                        || count === '') return null;
+                return +count;
+            }
+        }
+
+        alert( `Count: ${readNumber()}` );
+    </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+Объекты = словари python. Создаются в {}
+Создаются двумя способами:
+1. let user = new Object();
+2. let user = {};
+Пример:
+let user = {
+    name: 'John',
+    age: 30,
+    'likes birds': true, // если несколько слов в ключе то пишется в '', но не будет работать доступ через точку
+    };
+для обращения:
+console.log( user.name );
+console.log( user['likes birds']);
+для удаления:
+delete user.age;
+delete user['likes birds'];
+
+оператор in для проверки, вернет бул:
+let user = { name: "John", age: 30 };
+
+alert( "age" in user ); // true, user.age существует
+alert( "blabla" in user ); // false, user.blabla не существует
+
+цикл for in :
+let user = {
+  name: "John",
+  age: 30,
+  isAdmin: true
+};
+
+for (let key in user) {
+  // ключи
+  alert( key );  // name, age, isAdmin
+  // значения ключей
+  alert( user[key] ); // John, 30, true
+}
+
+переменные объектов содержат ссылку на объект в памяти
+
+если хотим создать клон объекта то нужно сделать это через цикл фор
+
+или копировать через Object.assign :
+let user = { name: "John" };
+
+let permissions1 = { canView: true };
+let permissions2 = { canEdit: true };
+
+// копируем все свойства из permissions1 и permissions2 в user
+Object.assign(user, permissions1, permissions2);
+
+// теперь user = { name: "John", canView: true, canEdit: true }
+
+Или :
+let user = {
+  name: "John",
+  age: 30
+};
+
+let clone = Object.assign({}, user);
+
+Или, чтобы не изобретать велосипед заново, возьмите готовую реализацию, например _.cloneDeep(obj) из библиотеки JavaScript lodash.
+
+Также мы можем использовать глобальный метод structuredClone(), поддерживается только современными браузерами
+
+Методы объекта это функции который были присвоены объектам. пример:
+let user = {
+  name: "John",
+  age: 30
+};
+
+user.sayHi = function() {
+  alert("Привет!");
+};
+
+user.sayHi(); // Привет!
+
+Сокращенный вариант:
+// сокращённая запись выглядит лучше, не так ли?
+user = {
+  sayHi() { // то же самое, что и "sayHi: function(){...}"
+    alert("Привет");
+  }
+};
+
+Ключевое слово this в методах:
+let user = {
+  name: "John",
+  age: 30,
+
+  sayHi() {
+    // "this" - это "текущий объект".
+    alert(this.name);
+  }
+
+};
+
+user.sayHi(); // John
+
+У стрелочных функций нету this.
+
+Конструкторы:
+Имя ф-ии конструктора должно начинаться с большой буквы.
+ф-ия конструктор должна выполняться только с помощью оператора new
+function User(name) {
+  this.name = name;
+  this.isAdmin = false;
+}
+
+let user = new User("Jack");
+
+alert(user.name); // Jack
+alert(user.isAdmin); // false
+
+функция new.target:
+function User(name) {
+  if (!new.target) { // в случае, если вы вызвали меня без оператора new
+    return new User(name); // ...я добавлю new за вас
+  }
+
+  this.name = name;
+}
+
+let john = User("John"); // переадресовывает вызов на new User
+alert(john.name); // John
+
+Оператор ? в цепочке, пример :
+let user = {}; // пользователь без адреса
+
+alert( user?.address?.street ); // undefined (без ошибки)
+
+можно так же проверять функции:
+let userAdmin = {
+  admin() {
+    alert("Я админ");
+  }
+};
+
+let userGuest = {};
+
+userAdmin.admin?.(); // Я админ
+
+userGuest.admin?.(); // ничего не произойдет (такого метода нет)
+
+Так же вложенные значение, квадратные скобки:
+let key = "firstName";
+
+let user1 = {
+  firstName: "John"
+};
+
+let user2 = null;
+
+alert( user1?.[key] ); // John
+alert( user2?.[key] ); // undefined
+
+
+Тип данных Символ (Symbol):
+Представляет собой уникальный идентификатор.
+// Создаём новый символ - id
+let id = Symbol('Название или описание');
+
+Не преобразуется в строку неявно. Можно вывести явно преобразовав в строку.
+или можно обратиться к свойству через .description
+
+Если мы хотим использовать символ при литеральном объявлении,
+то нужно делать так:
+let id = Symbol("id");
+
+let user = {
+  name: "Вася",
+  [id]: 123 // просто "id: 123" не сработает
+};
+
+А вот Object.assign, в отличие от цикла for..in, копирует и строковые, и символьные свойства
+
+ГЛОБАЛЬНЫЕ символы:
+Для чтения (или, при отсутствии, создания) символа из реестра используется вызов Symbol.for(key).
+
+пример:
+// читаем символ из глобального реестра и записываем его в переменную
+let id = Symbol.for("id"); // если символа не существует, он будет создан
+
+// читаем его снова и записываем в другую переменную (возможно, из другого места кода)
+let idAgain = Symbol.for("id");
+
+// проверяем -- это один и тот же символ
+alert( id === idAgain ); // true
+
+для глобальных символов которые принимает глобальныйы символы и 
+возвращает его Имя Symbol.keyFor(sym):
+// получаем символ по имени
+let sym = Symbol.for("name");
+let sym2 = Symbol.for("id");
+
+// получаем имя по символу
+alert( Symbol.keyFor(sym) ); // name
+alert( Symbol.keyFor(sym2) ); // id
+
+Object.getOwnPropertySymbols(obj)  - Можно получить все свойства
+объекта  с ключами-символами
+Reflect.ownKeys(obj) - Возвращает все ключи объекта, включая символьные
+
+

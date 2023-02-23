@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        'use strict';
+        let n = prompt('Введите чило: ', '')
+           ,test;
+// Все алерты кроме последнего я написал что бы понимать работу цикла 
+        loop: for (let i = 2; i <= n; i++) {
+            alert('Первый цикл i: ' + i);
+            for (let j = 2; j < i; j++) {
+                alert('второй цикл, i: ' + i + ' j: ' + j);
+                test = i % j;
+                alert('Результат: ' + test + ' Bool: ' + Boolean(i % j == 0))
+                if (i % j == 0) {
+                    alert('Условие if, вывод i: ' + i);
+                    continue loop;
+                }
+            }
+            alert('simple count: ' + i);
+        }  
+    </script>
+</body>
+</html>

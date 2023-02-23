@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        'use strict';
+
+        let arroy = []
+           ,count
+           ,sum = 0;
+
+        function sumInput() {
+            loop: while(true) {
+
+                count = prompt('Turn count: ', 0);
+
+                if ( count == '' 
+                  || count == null 
+                  || !isFinite(count) ) {
+
+                    for(let i = 0; i < arroy.length; i++) {
+                        sum += +arroy[i];
+                    }
+                    return alert('summa: ' + sum);
+                }else {
+                    arroy.push(count);
+                    continue loop;
+                }
+            }
+        }
+        sumInput()
+    </script>
+</body>
+</html>

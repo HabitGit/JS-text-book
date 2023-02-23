@@ -1,0 +1,12 @@
+let name = "Ilya";
+
+alert( `hello ${1}` ); //hello 1
+
+alert( `hello ${"name"}` ); //hello name
+
+alert( `hello ${name}` ); //hello Ilya
+
+так же косая ковычка позволяет писать много строк с переносом: 
+` hello,
+  howe are you,
+  fine `;
