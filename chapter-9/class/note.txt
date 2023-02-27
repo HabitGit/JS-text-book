@@ -1,0 +1,67 @@
+Синтаксис «class»
+
+Базовый синтаксис выглядит так:
+
+class MyClass {
+  prop = value; // свойство
+  constructor(...) { // конструктор
+    // ...
+  }
+  method(...) {} // метод
+  get something(...) {} // геттер
+  set something(...) {} // сеттер
+  [Symbol.iterator]() {} // метод с вычисляемым именем (здесь - символом)
+  // ...
+}
+
+Синтаксис для расширения другого класса следующий: class Child 
+extends Parent.
+
+class Rabbit extends Animal {
+  hide() {
+    alert(`${this.name} прячется!`);
+  }
+}
+
+let rabbit = new Rabbit("Белый кролик");
+
+rabbit.run(5); // Белый кролик бежит со скоростью 5.
+rabbit.hide(); // Белый кролик прячется!
+
+
+
+    super.method(...) вызывает родительский метод.
+    super(...) для вызова родительского конструктора (работает только внутри нашего конструктора).
+
+
+class Animal {
+
+  constructor(name) {
+    this.speed = 0;
+    this.name = name;
+  }
+
+  run(speed) {
+    this.speed = speed;
+    alert(`${this.name} бежит со скоростью ${this.speed}.`);
+  }
+
+  stop() {
+    this.speed = 0;
+    alert(`${this.name} стоит неподвижно.`);
+  }
+
+}
+
+class Rabbit extends Animal {
+  hide() {
+    alert(`${this.name} прячется!`);
+  }
+
+  stop() {
+    super.stop(); // вызываем родительский метод stop
+    this.hide(); // и затем hide
+  }
+}
+
+
