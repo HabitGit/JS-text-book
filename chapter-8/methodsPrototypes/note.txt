@@ -1,0 +1,39 @@
+В первой главе этого раздела мы упоминали, что существуют современные методы работы с прототипами.
+
+Свойство __proto__ считается устаревшим, и по стандарту оно должно поддерживаться только браузерами.
+
+Современные же методы это:
+
+    Object.create(proto, [descriptors]) – создаёт пустой объект со свойством [[Prototype]], указанным как proto, и необязательными дескрипторами свойств descriptors.
+    Object.getPrototypeOf(obj) – возвращает свойство [[Prototype]] объекта obj.
+    Object.setPrototypeOf(obj, proto) – устанавливает свойство [[Prototype]] объекта obj как proto.
+
+    Object.keys(obj) / Object.values(obj) / Object.entries(obj) – возвращают массив всех перечисляемых собственных строковых ключей/значений/пар ключ-значение.
+    Object.getOwnPropertySymbols(obj) – возвращает массив всех собственных символьных ключей.
+    Object.getOwnPropertyNames(obj) – возвращает массив всех собственных строковых ключей.
+    Reflect.ownKeys(obj) – возвращает массив всех собственных ключей.
+    obj.hasOwnProperty(key): возвращает true, если у obj есть собственное (не унаследованное) свойство с именем key.
+
+
+Эти методы нужно использовать вместо __proto__.
+
+
+У Object.create есть необязательный второй аргумент: дескрипторы свойств. Мы можем добавить дополнительное свойство новому объекту таким образом:
+
+let animal = {
+  eats: true
+};
+
+let rabbit = Object.create(animal, {
+  jumps: {
+    value: true
+  }
+});
+
+alert(rabbit.jumps); // true
+
+
+// клон obj c тем же прототипом (с поверхностным копированием свойств)
+let clone = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj));
+
+

@@ -1,0 +1,34 @@
+привязать контекст с помощью bind
+
+В современном JavaScript у функций есть встроенный метод bind, который позволяет зафиксировать this.
+
+Базовый синтаксис bind:
+
+// полный синтаксис будет представлен немного позже
+let boundFunc = func.bind(context);
+
+полный синтаксис:
+let bound = func.bind(context, [arg1], [arg2], ...);
+
+
+let user = {
+  firstName: "Вася"
+};
+
+function func() {
+  alert(this.firstName);
+}
+
+let funcUser = func.bind(user);
+funcUser(); // Вася
+
+
+Если у объекта много методов и мы планируем их активно передавать, то можно привязать контекст для них всех в цикле:
+
+for (let key in user) {
+  if (typeof user[key] == 'function') {
+    user[key] = user[key].bind(user);
+  }
+}
+
+

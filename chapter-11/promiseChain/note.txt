@@ -1,0 +1,50 @@
+Она выглядит вот так:
+
+new Promise(function(resolve, reject) {
+
+  setTimeout(() => resolve(1), 1000); // (*)
+
+}).then(function(result) { // (**)
+
+  alert(result); // 1
+  return result * 2;
+
+}).then(function(result) { // (***)
+
+  alert(result); // 2
+  return result * 2;
+
+}).then(function(result) {
+
+  alert(result); // 4
+  return result * 2;
+
+});
+
+
+Код ниже запрашивает файл user.json и загружает его содержимое с сервера:
+
+fetch('/article/promise-chaining/user.json')
+  // .then в коде ниже выполняется, когда удалённый сервер отвечает
+  .then(function(response) {
+    // response.text() возвращает новый промис,
+    // который выполняется и возвращает полный ответ сервера,
+    // когда он загрузится
+    return response.text();
+  })
+  .then(function(text) {
+    // ...и здесь содержимое полученного файла
+    alert(text); // {"name": "iliakan", isAdmin: true}
+  });
+
+Есть также метод response.json(), который читает данные в формате JSON. Он больше подходит для нашего примера, так что давайте использовать его.
+
+Мы также применим стрелочные функции для более компактной записи кода:
+
+// то же самое, что и раньше, только теперь response.json() читает данные в формате JSON
+fetch('/article/promise-chaining/user.json')
+  .then(response => response.json())
+  .then(user => alert(user.name)); // iliakan, получили имя пользователя
+
+
+  

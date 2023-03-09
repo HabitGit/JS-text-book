@@ -1,0 +1,33 @@
+function loadScript(src, callback) {
+  let script = document.createElement('script');
+  script.src = src;
+  script.onload = () => callback(script);
+  document.head.append(script);
+}
+
+Событие onload описано в статье Загрузка ресурсов: onload и onerror, оно в основном выполняет функцию после загрузки и выполнения скрипта.
+
+
+Ниже улучшенная версия loadScript, которая умеет отслеживать ошибки загрузки:
+
+function loadScript(src, callback) {
+  let script = document.createElement('script');
+  script.src = src;
+
+  script.onload = () => callback(null, script);
+  script.onerror = () => callback(new Error(`Не удалось загрузить скрипт ${src}`));
+
+  document.head.append(script);
+}
+
+
+Опять же, подход, который мы использовали в loadScript, также распространён и называется «колбэк с первым аргументом-ошибкой» («error-first callback»).
+
+Правила таковы:
+
+    Первый аргумент функции callback зарезервирован для ошибки. В этом случае вызов выглядит вот так: callback(err).
+    Второй и последующие аргументы — для результатов выполнения. В этом случае вызов выглядит вот так: callback(null, result1, result2…).
+
+Одна и та же функция callback используется и для информирования об ошибке, и для передачи результатов.
+
+

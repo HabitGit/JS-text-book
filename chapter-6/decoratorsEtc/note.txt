@@ -1,0 +1,93 @@
+function slow(x) {
+  // здесь могут быть ресурсоёмкие вычисления
+  alert(`Called with ${x}`);
+  return x;
+}
+
+function cachingDecorator(func) {
+  let cache = new Map();
+
+  return function(x) {
+    if (cache.has(x)) {    // если кеш содержит такой x,
+      return cache.get(x); // читаем из него результат
+    }
+
+    let result = func(x); // иначе, вызываем функцию
+
+    cache.set(x, result); // и кешируем (запоминаем) результат
+    return result;
+  };
+}
+
+slow = cachingDecorator(slow);
+
+alert( slow(1) ); // slow(1) кешируем
+alert( "Again: " + slow(1) ); // возвращаем из кеша
+
+alert( slow(2) ); // slow(2) кешируем
+alert( "Again: " + slow(2) ); // возвращаем из кеша
+
+
+Применение «func.call» для передачи контекста.
+Синтаксис:
+
+func.call(context, arg1, arg2, ...)
+
+Еще пример декоратора:
+
+let worker = {
+  slow(min, max) {
+    alert(`Called with ${min},${max}`);
+    return min + max;
+  }
+};
+
+function cachingDecorator(func, hash) {
+  let cache = new Map();
+  return function() {
+    let key = hash(arguments); // (*)
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+
+    let result = func.call(this, ...arguments); // (**)
+
+    cache.set(key, result);
+    return result;
+  };
+}
+
+function hash(args) {
+  return args[0] + ',' + args[1];
+}
+
+worker.slow = cachingDecorator(worker.slow, hash);
+
+alert( worker.slow(3, 5) ); // работает
+alert( "Again " + worker.slow(3, 5) ); // аналогично (из кеша)
+
+
+
+Синтаксис встроенного метода func.apply:
+
+func.apply(context, args)
+
+Он выполняет func, устанавливая this=context и принимая в качестве списка аргументов псевдомассив args.
+
+Единственная разница в синтаксисе между call и apply состоит в том, что call ожидает список аргументов, в то время как apply принимает псевдомассив.
+
+Эти два вызова почти эквивалентны:
+
+func.call(context, ...args); // передаёт массив как список с оператором расширения
+func.apply(context, args);   // тот же эффект
+
+
+Заимствование метода
+ Улучшение хэша:
+ function hash() {
+   alert( [].join.call(arguments) ); // 1,2
+ }
+
+ hash(1, 2);
+
+ 

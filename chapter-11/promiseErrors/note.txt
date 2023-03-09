@@ -1,0 +1,94 @@
+Достаточно использовать 1 catch в конце и он обработает ошибку
+
+fetch('/article/promise-chaining/user.json')
+  .then(response => response.json())
+  .then(user => fetch(`https://api.github.com/users/${user.name}`))
+  .then(response => response.json())
+  .then(githubUser => new Promise((resolve, reject) => {
+    let img = document.createElement('img');
+    img.src = githubUser.avatar_url;
+    img.className = "promise-avatar-example";
+    document.body.append(img);
+
+    setTimeout(() => {
+      img.remove();
+      resolve(githubUser);
+    }, 3000);
+  }))
+  .catch(error => alert(error.message));
+
+
+Пробрасывание ошибок
+
+В примере ниже .catch успешно обрабатывает ошибку:
+
+// the execution: catch -> then
+new Promise((resolve, reject) => {
+
+  throw new Error("Ошибка!");
+
+}).catch(function(error) {
+
+  alert("Ошибка обработана, продолжить работу");
+
+}).then(() => alert("Управление перейдёт в следующий then"));
+
+
+В примере ниже мы видим другую ситуацию с блоком .catch. Обработчик (*) перехватывает ошибку и не может обработать её (например, он знает как обработать только URIError), поэтому ошибка пробрасывается далее:
+
+// the execution: catch -> catch -> then
+new Promise((resolve, reject) => {
+
+  throw new Error("Ошибка!");
+
+}).catch(function(error) { // (*)
+
+  if (error instanceof URIError) {
+    // обрабатываем ошибку
+  } else {
+    alert("Не могу обработать ошибку");
+
+    throw error; // пробрасывает эту или другую ошибку в следующий catch
+  }
+
+}).then(function() {
+  /* не выполнится */
+}).catch(error => { // (**)
+
+  alert(`Неизвестная ошибка: ${error}`);
+  // ничего не возвращаем => выполнение продолжается в нормальном режиме
+
+});
+
+Управление переходит от первого блока .catch (*) к следующему (**), вниз по цепочке.
+
+
+Необработанные ошибки
+
+
+Что произойдёт, если ошибка не будет обработана? Например, мы просто забыли добавить .catch в конец цепочки, как здесь:
+
+new Promise(function() {
+  noSuchFunction(); // Ошибка (нет такой функции)
+})
+  .then(() => {
+    // обработчики .then, один или более
+  }); // без .catch в самом конце!
+
+В случае ошибки выполнение должно перейти к ближайшему обработчику ошибок. Но в примере выше нет никакого обработчика. Поэтому ошибка как бы «застревает», её некому обработать.
+
+
+
+Задачи
+
+Ошибка в setTimeout
+
+Что вы думаете? Выполнится ли .catch? Поясните свой ответ.
+
+new Promise(function(resolve, reject) {
+  setTimeout(() => {
+    throw new Error("Whoops!");
+  }, 1000);
+}).catch(alert);
+
+Код выполнится раньше чем в нем сгенерируется ошибка, по этому .catch не словит ее

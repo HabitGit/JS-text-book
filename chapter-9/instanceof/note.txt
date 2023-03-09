@@ -1,0 +1,16 @@
+Оператор instanceof
+
+Синтаксис:
+
+obj instanceof Class
+
+Оператор вернёт true, если obj принадлежит классу Class или наследующему от него.
+
+
+obj.__proto__ === Class.prototype?
+obj.__proto__.__proto__ === Class.prototype?
+obj.__proto__.__proto__.__proto__ === Class.prototype?
+...
+// если какой-то из ответов true - возвратить true
+// если дошли до конца цепочки - false
+

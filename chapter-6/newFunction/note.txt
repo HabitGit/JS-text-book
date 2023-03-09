@@ -1,0 +1,5 @@
+Синтаксис для объявления функции:
+
+let func = new Function([arg1, arg2, ...argN], functionBody);
+Функция создаётся с заданными аргументами arg1...argN и телом functionBody.
+
